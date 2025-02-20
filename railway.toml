@@ -3,6 +3,13 @@ builder = "NIXPACKS"
 buildCommand = "chmod +x build.sh && ./build.sh"
 
 [deploy]
-startCommand = "gunicorn backend.wsgi"
+startCommand = "gunicorn Backend.wsgi"
 healthcheckPath = "/admin/"
 healthcheckTimeout = 100
+
+[nixpacks]
+install = [
+    "default-libmysqlclient-dev",
+    "pkg-config",
+    "python3-dev"
+]
