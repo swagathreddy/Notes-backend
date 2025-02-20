@@ -1,11 +1,12 @@
 #!/bin/bash
-
-# Install system dependencies for MySQL
+# Install system dependencies
 apt-get update
-apt-get install -y default-libmysqlclient-dev build-essential pkg-config
+apt-get install -y default-libmysqlclient-dev pkg-config build-essential python3-dev
 
-# Upgrade pip and install Python dependencies
-python -m pip install --upgrade pip
+# Set up virtual environment and install Python packages
+python -m venv /opt/venv
+source /opt/venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
 
 # Run Django commands
