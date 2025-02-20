@@ -73,24 +73,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Backend.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
+'default': {
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',
-        'USER': 'root',
-        'PASSWORD': 'VCUcJAiGxvThVjQQTXdvhJrvlXIHsUBH',
-        'HOST': 'hopper.proxy.rlwy.net',
-        'PORT': '47730',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            'charset': 'utf8mb4',
-        },
-        'CONN_MAX_AGE': 60,
-        'POOL_OPTIONS': {
-            'POOL_SIZE': 20,
-            'MAX_OVERFLOW': 10
-        }
+        "USER":'postgres',
+        "PASSWORD":"GfUyZywAVqoRMudlFPKZXkcWcRAjIjRS",
+        "HOST":"viaduct.proxy.rlwy.net",
+        "PORT":"12879",
     }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
