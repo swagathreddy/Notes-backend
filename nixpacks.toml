@@ -1,0 +1,15 @@
+[phases.setup]
+nixPkgs = ["pkg-config", "python39", "mysql80", "libmysqlclient"]
+
+[phases.install]
+cmds = [
+  "apt-get update",
+  "apt-get install -y default-libmysqlclient-dev pkg-config",
+  "python -m venv /opt/venv",
+  ". /opt/venv/bin/activate",
+  "pip install --upgrade pip",
+  "pip install -r requirements.txt"
+]
+
+[start]
+cmd = "gunicorn Backend.wsgi"
