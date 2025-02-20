@@ -1,15 +1,5 @@
 #!/bin/bash
-
-# Install Python dependencies
+python -m pip install --upgrade pip
 pip install -r requirements.txt
-
-# Install and build frontend
-cd frontend
-npm install
-npm run build
-cd ..
-
-# Django commands
-cd Backend
-python manage.py collectstatic --noinput
+python manage.py collectstatic --no-input
 python manage.py migrate
