@@ -1,8 +1,0 @@
-[build]
-builder = "NIXPACKS"
-buildCommand = "chmod +x build.sh && ./build.sh"
-
-[deploy]
-startCommand = "gunicorn Backend.wsgi"
-healthcheckPath = "/admin/"
-healthcheckTimeout = 100
