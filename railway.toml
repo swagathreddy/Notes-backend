@@ -1,6 +1,5 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "chmod +x build.sh && ./build.sh"
 
 [deploy]
 startCommand = "gunicorn Backend.wsgi"
@@ -8,8 +7,8 @@ healthcheckPath = "/admin/"
 healthcheckTimeout = 100
 
 [nixpacks]
-install = [
-    "default-libmysqlclient-dev",
-    "pkg-config",
-    "python3-dev"
-]
+platforms = ["ubuntu"]
+
+[nixpacks.build.env]
+MYSQLCLIENT_CFLAGS = "-I/usr/include/mysql"
+MYSQLCLIENT_LDFLAGS = "-L/usr/lib/x86_64-linux-gnu -lmysqlclient"
