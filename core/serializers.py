@@ -1,44 +1,49 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from .models import Note,UserProfile
+from .models import Note  # ✅ Import models properly
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields = ['phonenumber']
-
+# ✅ User Registration Serializer
 class UserSerializer(serializers.ModelSerializer):
-    profile = UserProfileSerializer(required=True)
     confirm_password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'password', 'confirm_password', 'profile']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'password', 'confirm_password']
         extra_kwargs = {'password': {'write_only': True}}
 
     def validate(self, data):
         if data['password'] != data['confirm_password']:
-            raise serializers.ValidationError("Passwords do not match.")
+            raise serializers.ValidationError({"password": "Passwords do not match."})
+
+        if User.objects.filter(email=data['email']).exists():
+            raise serializers.ValidationError({"email": "Email is already in use."})
+
         return data
 
     def create(self, validated_data):
-        profile_data = validated_data.pop('profile')
         validated_data.pop('confirm_password')
         user = User.objects.create_user(**validated_data)
-        UserProfile.objects.create(user=user, **profile_data)
         return user
 
+# ✅ Custom Login Serializer (Use Email Instead of Username)
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        user = authenticate(**data)
+        try:
+            user = User.objects.get(email=data["email"])
+        except User.DoesNotExist:
+            raise serializers.ValidationError({"email": "User with this email does not exist."})
+
+        user = authenticate(username=user.username, password=data["password"])
         if user and user.is_active:
             return user
-        raise serializers.ValidationError("Invalid credentials.")
 
+        raise serializers.ValidationError({"error": "Invalid email or password."})
+
+# ✅ Notes Serializer
 class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
