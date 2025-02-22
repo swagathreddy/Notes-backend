@@ -118,7 +118,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Local development
-   "https://notes-frontend-eight-omega.vercel.app"
+   "https://notes-frontend-eight-omega.vercel.app",
+    "https://note-drop.vercel.app"
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWS_CREDENTIALS = True
