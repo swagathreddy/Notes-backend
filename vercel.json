@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "escaperoom/wsgi.py",
+      "src": "b]Backend/wsgi.py",
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "15mb",
@@ -14,7 +14,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "escaperoom/wsgi.py"
+      "dest": "Backend/wsgi.py"
     }
   ]
 }
