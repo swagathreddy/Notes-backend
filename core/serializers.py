@@ -10,16 +10,24 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'email', 'password', 'confirm_password']
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'confirm_password': {'write_only': True},
+        }
 
     def validate(self, data):
         if data['password'] != data['confirm_password']:
-            raise serializers.ValidationError({"password": "Passwords do not match."})
+            raise serializers.ValidationError({"confirm_password": "Passwords do not match."})
 
         if User.objects.filter(email=data['email']).exists():
-            raise serializers.ValidationError({"email": "Email is already in use."})
+            raise serializers.ValidationError({"email": "User with this email already exists."})
 
         return data
+
+    def create(self, validated_data):
+        validated_data.pop('confirm_password')
+        return User.objects.create_user(**validated_data)
+
 
     def create(self, validated_data):
         validated_data.pop('confirm_password')
@@ -32,16 +40,20 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
+        email = data.get("email")
+        password = data.get("password")
+
         try:
-            user = User.objects.get(email=data["email"])
+            user = User.objects.get(email=email)
         except User.DoesNotExist:
             raise serializers.ValidationError({"email": "User with this email does not exist."})
 
-        user = authenticate(username=user.username, password=data["password"])
-        if user and user.is_active:
-            return user
+        user = authenticate(username=user.username, password=password)
+        if user is None or not user.is_active:
+            raise serializers.ValidationError({"password": "Invalid email or password."})
 
-        raise serializers.ValidationError({"error": "Invalid email or password."})
+        return user
+
 
 # ✅ Notes Serializer
 class NoteSerializer(serializers.ModelSerializer):
