@@ -21,5 +21,4 @@ urlpatterns = [
     path("health/", health_check, name='health_check'),
 
     # ✅ Serve React Frontend (Must be last)
-    re_path(r'^(?!admin|core|health|static|media).*$', TemplateView.as_view(template_name='index.html')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
